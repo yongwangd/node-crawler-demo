@@ -39,7 +39,7 @@ pageSource$.subscribe(result => {
   console.log(result.url);
   let $ = cheerio.load(result.src);
 
-  //get all the authors from the page source and print them to console.
+  //get all the authors from the page source and print them to console. You are certainly save them to a database as you need
   $('.quotes .quote .authorOrTitle')
     .toArray()
     .map(a => $(a).text())
