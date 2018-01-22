@@ -1,5 +1,7 @@
 # Node crawler Demo Project
 
+this project is to crawl the authors of the quotes for all 100 pages from [https://www.goodreads.com/quotes](https://www.goodreads.com/quotes)
+
 ### Installing
 
 ```
@@ -12,7 +14,7 @@ node index.js
 
 This project is using a npm package called `sleepydog`. I haven't had time to create the documentation for it.
 
-It comes with a `StaticCrawler`, which is used to crawl static pages (like this project, get all the 100 pages' quotes from [https://www.goodreads.com/quotes](https://www.goodreads.com/quotes) ), and a `DynamicCrawler`, which is used to crawl ajax based pages.
+It comes with a `StaticCrawler`, which is used to crawl static pages, and a `DynamicCrawler`, which is used to crawl ajax based pages.
 
 The api is very simple. [Cheerio](https://github.com/cheeriojs/cheerio) is used to parse the page source. It's pretty like jQuery.
 
