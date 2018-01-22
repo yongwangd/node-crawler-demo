@@ -3,67 +3,52 @@
 ### Installing
 
 ```
-Give the example
+git clone https://github.com/yongwangd/node-crawler-demo
+
+cd node-crawler-demo
+npm install
+node index.js
 ```
 
-And repeat
+This project is using a npm package called `sleepydog`. I haven't had time to create the documentation for it.
 
-```
-until finished
-```
+It comes with a `StaticCrawler`, which is used to crawl static pages (like this project, get all the 100 pages' quotes from [https://www.goodreads.com/quotes](https://www.goodreads.com/quotes), and a `DynamicCrawler`, which is used to crawl ajax based pages.
 
-End with an example of getting some data out of the system or using it for a little demo
+The api is very simple. [Cheerio](https://github.com/cheeriojs/cheerio) is used to parse the page source. It's pretty like jQuery.
 
-## Running the tests
+```js
+const { staticCrawler } = require('sleepydog');
+const cheerio = require('cheerio');
 
-Explain how to run the automated tests for this system
-
-### Break down into end to end tests
-
-Explain what these tests test and why
-
-```
-Give an example
+let { pageSource$, queueLink } = staticCrawler({
+  domain: 'https://www.goodreads.com',
+  startFrom: '/quotes'
+});
 ```
 
-### And coding style tests
+Create a new `staticCrawler` instance. `Domain` is the root domain of the website you want to crawl. `startFrom` is the sub domain. The return value is a object which has two fileds. `pageSource$` is a stream of page source, which you need to use cheerio to parse. `queueLink` is a method to queue new link you find from page source to crawl.
 
-Explain what these tests test and why
+```js
+//subscribe the pageSource$ and parse the page source using cheerio.
+//result: {src: 'page srouce', url: 'current url'}
+pageSource$.subscribe(result => {
+  console.log(result.url);
+  let $ = cheerio.load(result.src);
 
+  //get all the authors from the page source and print them to console.
+  $('.quotes .quote .authorOrTitle')
+    .toArray()
+    .map(a => $(a).text())
+    .forEach(console.log);
+
+  //get all the links from Paginator and queue them to the url queue. The crawler will pick up next url from the url queue when it finishes crawling current url.
+  $('.paginator a')
+    .toArray()
+    .map(a => $(a).attr('href'))
+    .map(queueLink);
+});
 ```
-Give an example
-```
 
-## Deployment
+`sleepydog` also has some advanced features, like passing data between link, using cookie for login, crawling dynamic web pages using selenium. let me know if you need them.
 
-Add additional notes about how to deploy this on a live system
-
-## Built With
-
-* [Dropwizard](http://www.dropwizard.io/1.0.2/docs/) - The web framework used
-* [Maven](https://maven.apache.org/) - Dependency Management
-* [ROME](https://rometools.github.io/rome/) - Used to generate RSS Feeds
-
-## Contributing
-
-Please read [CONTRIBUTING.md](https://gist.github.com/PurpleBooth/b24679402957c63ec426) for details on our code of conduct, and the process for submitting pull requests to us.
-
-## Versioning
-
-We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/your/project/tags).
-
-## Authors
-
-* **Billie Thompson** - _Initial work_ - [PurpleBooth](https://github.com/PurpleBooth)
-
-See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
-
-## Acknowledgments
-
-* Hat tip to anyone who's code was used
-* Inspiration
-* etc
+Cheers!
