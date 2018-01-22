@@ -56,6 +56,6 @@ pageSource$.subscribe(result => {
 link$.subscribe(l => console.log(l, 'link'));
 ```
 
-`sleepydog` also has some advanced features, like passing data between link, using cookie for login, crawling dynamic web pages using selenium. let me know if you need them.
+Now you should see quote authors from all 100 pages are being printed in the console. Cheers!
 
-Cheers!
+`sleepydog` also has some advanced features, like passing data between link, using cookie for login, crawling dynamic web pages using selenium. let me know if you need them.
