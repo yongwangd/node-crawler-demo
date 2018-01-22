@@ -12,9 +12,9 @@ pageSource$.subscribe(result => {
   $('.quotes .quote .authorOrTitle')
     .toArray()
     .map(a => $(a).text())
-    .forEach(console.log);
+    .map(x => console.log(x));
 
-  $('.paginator a')
+  $('a.next_page')
     .toArray()
     .map(a => $(a).attr('href'))
     .map(queueLink);

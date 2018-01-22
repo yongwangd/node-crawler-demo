@@ -26,7 +26,9 @@ let { pageSource$, queueLink } = staticCrawler({
 });
 ```
 
-Create a new `staticCrawler` instance. `Domain` is the root domain of the website you want to crawl. `startFrom` is the sub domain. The return value is a object which has two fileds. `pageSource$` is a stream of page source, which you need to use cheerio to parse. `queueLink` is a method to queue new link you find from page source to crawl.
+Create a new `staticCrawler` instance. `Domain` is the root domain of the website you want to crawl. `startFrom` is the sub domain. The return value is a object which has the following fileds.
+`pageSource$` is a stream of page source, which you need to use cheerio to parse. `queueLink` is a method to queue new link you find from page source to crawl.
+`link$` is a url stream that the crawler has crawled
 
 ```js
 //subscribe the pageSource$ and parse the page source using cheerio.
@@ -41,12 +43,15 @@ pageSource$.subscribe(result => {
     .map(a => $(a).text())
     .forEach(console.log);
 
-  //get all the links from Paginator and queue them to the url queue. The crawler will pick up next url from the url queue when it finishes crawling current url.
-  $('.paginator a')
+  //get the nextpage URL from the paginator and add it to the url queue. The crawler will pick up next url from the url queue when it finishes crawling current url.
+  $('a.next_page')
     .toArray()
     .map(a => $(a).attr('href'))
     .map(queueLink);
 });
+
+//Print the urls that has been crawled. This is not necessary, just for logging purpose
+link$.subscribe(l => console.log(l, 'link'));
 ```
 
 `sleepydog` also has some advanced features, like passing data between link, using cookie for login, crawling dynamic web pages using selenium. let me know if you need them.
