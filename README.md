@@ -12,7 +12,7 @@ npm install
 node index.js
 ```
 
-This project is using a npm package called `sleepydog`. I haven't had time to create the documentation for it.
+This project is using a npm package called `sleepydog` I created long time ago. I haven't had time to create the documentation for it.
 
 It comes with a `StaticCrawler`, which is used to crawl static pages, and a `DynamicCrawler`, which is used to crawl ajax based pages.
 
